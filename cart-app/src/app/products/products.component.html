@@ -1,0 +1,39 @@
+<div class="container">
+    <h1>Shopping Cart</h1>
+    <form #itemForm="ngForm" (submit)="itemFormSubmitted(itemForm.value)">
+        <h4>Add Item to Cart</h4>
+        <input type="text" placeholder="Product Name" name="product" ngModel>
+        <input type="text" placeholder="Quantity" name="quantity" ngModel>
+        <input type="text" placeholder="Price" name="price" ngModel>
+        <br>
+        <button type=submit>Submit</button>
+    </form>
+</div>
+<div class="wrapper">
+    <table>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <tr *ngFor="let item of items">
+            <td>{{item.product}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.price}}</td>
+            <td><i (click)="itemClicked(item)" class="far fa-edit"></i></td>
+            <td><i (click)="deleteItem(item.id)" class="far fa-trash-alt"></i></td>
+        </tr>
+    </table>
+</div>
+
+<div *ngIf="editItem" class="overlay" toggle="editItem ? 'display: none' : 'display: visible'">
+<div class="form-popup" id="myForm">
+    <h4>Update Shopping Cart Item:</h4>
+<form (submit)="updateItem($event)">
+    <input type="text" placeholder="Update product" [(ngModel)]="selectedItem.product" [ngModelOptions]="{standalone: true}">
+    <input type="text" placeholder="Update quantity" [(ngModel)]="selectedItem.quantity" [ngModelOptions]="{standalone: true}">
+    <input type="text" placeholder="Update price" [(ngModel)]="selectedItem.price" [ngModelOptions]="{standalone: true}">
+</form>
+<button class="save" (click)="editItem = false">Save</button>
+</div>
+</div>

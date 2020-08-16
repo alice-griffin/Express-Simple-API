@@ -1,5 +1,5 @@
 const express = require('express');
-const cartItems = express.Router();
+const cartItems = express.Router(); //this is what we want to export
 
 const myItems = [
     {id: 1, product: 'apples', price: 3.99, quantity: 2},
@@ -7,8 +7,8 @@ const myItems = [
     {id: 3, product: 'bagels', price: 2.99, quantity: 1},
     {id: 4, product: 'avocados', price: 3.00, quantity: 3},
     {id: 5, product: 'water', price: 5.99, quantity: 5},
-    {id: 5, product: 'tomatoes', price: 1.99, quantity: 6},
-    {id: 5, product: 'potatoes', price: 4.99, quantity: 7},
+    {id: 6, product: 'tomatoes', price: 1.99, quantity: 6},
+    {id: 7, product: 'potatoes', price: 4.99, quantity: 7},
 ];
 
 cartItems.get('/', (req, res) => {
@@ -36,33 +36,33 @@ cartItems.get('/:id', (req, res) => {
 })
 
 cartItems.post('/', (req, res) => {
-    const lastItemIndex = myItems.length - 1; 
-    const newId = myItems[lastItemIndex].id + 1;
-    const newItem = {id: newId, product: req.body.product, price: req.body.price , quantity: req.body.quantity}
+    const lastItemIndex = myItems.length - 1; //index of our last item in the array
+    const newId = myItems[lastItemIndex].id + 1; //assign a new id to our new item using last index and adding 1
+    const newItem = {id: newId, product: req.body.product, price: req.body.price, quantity: req.body.quantity}
     myItems.push(newItem);
-    res.status(201).send('added item to cart');
+    res.status(201).send(newItem);
 }) //req.body is used on post 
 
 
 cartItems.put('/:id', (req, res) => {
     const item = myItems.find(item => item.id == req.params.id);
     const itemIndex = myItems.indexOf(item);
-    myItems[itemIndex] = {id: itemIndex, product: req.body.product, quantity: req.body.quantity}
-    if (item) {
-    res.status(200).send(`updated item with id of ${req.params.id}`);
-    } else {
+    myItems[itemIndex] = {id: itemIndex.id, product: req.body.product, price: req.body.price, quantity: req.body.quantity}
+    if (!item) {
         res.status(204).send();
+    } else {
+        res.status(200).send(item);
     }
 }) 
 
 cartItems.delete('/:id', (req, res) => {
     const item = myItems.find(item => item.id == req.params.id);
     const itemIndex = myItems.indexOf(item);
-    if (item) {
     myItems.splice(itemIndex, 1);
-    res.send('you deleted an item');
-    } else
-    res.status(204).send();
+    if (!item) {
+        res.sendStatus(500);
+    }
+    res.status(204).send(item);
 })
 
 module.exports = cartItems; 
