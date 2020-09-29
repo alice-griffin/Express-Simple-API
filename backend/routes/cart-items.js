@@ -59,10 +59,7 @@ cartItems.delete('/:id', (req, res) => {
     const item = myItems.find(item => item.id == req.params.id);
     const itemIndex = myItems.indexOf(item);
     myItems.splice(itemIndex, 1);
-    if (!item) {
-        res.sendStatus(500);
-    }
-    res.status(204).send(item);
+    res.status(200).send(item);
 })
 
 module.exports = cartItems; 
